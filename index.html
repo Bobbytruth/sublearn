@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sublearn — Subconscious Learning Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-muted: #6b6660;
+    --ink-faint: #c8c4be;
+    --paper: #faf8f4;
+    --paper-warm: #f2ede4;
+    --paper-card: #ffffff;
+    --accent: #c17b3a;
+    --accent-light: #f0e4d4;
+    --accent-dark: #8a5520;
+    --teal: #2e7d6b;
+    --teal-light: #d4ede8;
+    --violet: #5c4a8a;
+    --violet-light: #e8e4f4;
+    --rose: #a03060;
+    --rose-light: #f4dce8;
+    --green: #3a6e3a;
+    --green-light: #dceeda;
+    --border: rgba(26,24,20,0.12);
+    --shadow: 0 2px 20px rgba(26,24,20,0.08);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--paper-card);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .header-tagline {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 300;
+  }
+
+  /* Main Layout */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    color: var(--ink-muted);
+    font-size: 1rem;
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    font-weight: 300;
+  }
+
+  /* Method pills */
+  .method-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border: 1px solid;
+  }
+
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pill-rep { background: var(--accent-light); color: var(--accent-dark); border-color: var(--accent); }
+  .pill-rep .pill-dot { background: var(--accent); }
+  .pill-sleep { background: var(--violet-light); color: var(--violet); border-color: var(--violet); }
+  .pill-sleep .pill-dot { background: var(--violet); }
+  .pill-emotion { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
+  .pill-emotion .pill-dot { background: var(--rose); }
+  .pill-immersive { background: var(--teal-light); color: var(--teal); border-color: var(--teal); }
+  .pill-immersive .pill-dot { background: var(--teal); }
+  .pill-visual { background: var(--green-light); color: var(--green); border-color: var(--green); }
+  .pill-visual .pill-dot { background: var(--green); }
+
+  /* Upload Zone */
+  .upload-zone {
+    border: 1.5px dashed var(--ink-faint);
+    border-radius: var(--radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--paper-card);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .upload-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    opacity: 0.3;
+  }
+
+  .upload-zone h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+
+  .upload-zone p {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 300;
+  }
+
+  #file-input { display: none; }
+
+  /* Text area section */
+  .text-section {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .text-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--paper-warm);
+  }
+
+  .text-section-header span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .char-count {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  #material-input {
+    width: 100%;
+    min-height: 200px;
+    padding: 1.25rem;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--paper-card);
+    resize: vertical;
+    outline: none;
+  }
+
+  #material-input::placeholder {
+    color: var(--ink-faint);
+  }
+
+  /* Method selector */
+  .method-selector {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .method-selector h3 {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+  }
+
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+  }
+
+  .method-card {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--paper);
+    user-select: none;
+  }
+
+  .method-card:hover {
+    border-color: var(--ink-faint);
+    background: var(--paper-card);
+  }
+
+  .method-card.selected {
+    background: var(--paper-card);
+  }
+
+  .method-card.selected.m-rep { border-color: var(--accent); background: var(--accent-light); }
+  .method-card.selected.m-sleep { border-color: var(--violet); background: var(--violet-light); }
+  .method-card.selected.m-emotion { border-color: var(--rose); background: var(--rose-light); }
+  .method-card.selected.m-immersive { border-color: var(--teal); background: var(--teal-light); }
+  .method-card.selected.m-visual { border-color: var(--green); background: var(--green-light); }
+
+  .method-card-num {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+
+  .method-card-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .method-card-desc {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-weight: 300;
+  }
+
+  .method-card.selected .method-card-desc { color: inherit; opacity: 0.7; }
+
+  /* Generate button */
+  .generate-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+    margin-bottom: 2.5rem;
+  }
+
+  .generate-btn:hover:not(:disabled) {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(26,24,20,0.2);
+  }
+
+  .generate-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Results */
+  .results-section {
+    display: none;
+  }
+
+  .results-section.visible {
+    display: block;
+  }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .results-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  .tab-nav {
+    display: flex;
+    gap: 6px;
+    background: var(--paper-warm);
+    border-radius: 100px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    background: var(--paper-card);
+    color: var(--ink);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* Result panels */
+  .result-panel {
+    display: none;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .result-panel.active { display: block; }
+
+  .result-panel-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .result-badge {
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-rep { background: var(--accent-light); color: var(--accent-dark); }
+  .badge-sleep { background: var(--violet-light); color: var(--violet); }
+  .badge-emotion { background: var(--rose-light); color: var(--rose); }
+  .badge-immersive { background: var(--teal-light); color: var(--teal); }
+  .badge-visual { background: var(--green-light); color: var(--green); }
+
+  .result-panel-title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .result-panel-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-left: auto;
+    font-weight: 300;
+  }
+
+  .result-body {
+    padding: 1.5rem;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink);
+    min-height: 120px;
+  }
+
+  /* Streaming dots */
+  .loading-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .loading-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes pulse {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Result content styling */
+  .result-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+    font-weight: 600;
+  }
+
+  .result-body h3:first-child { margin-top: 0; }
+
+  .result-body p { margin-bottom: 0.8rem; }
+
+  .result-body ul, .result-body ol {
+    margin: 0.6rem 0 0.8rem 1.5rem;
+  }
+
+  .result-body li { margin-bottom: 0.4rem; }
+
+  .result-body strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .result-body em {
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  .result-body blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  /* Summary strip */
+  .summary-strip {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-strip.visible { display: grid; }
+
+  .summary-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    text-align: center;
+  }
+
+  .summary-card .sc-icon { font-size: 1.2rem; margin-bottom: 4px; }
+  .summary-card .sc-label { font-size: 11px; color: var(--ink-muted); font-weight: 300; }
+  .summary-card .sc-val { font-size: 18px; font-weight: 500; color: var(--ink); }
+
+  /* API Key bar */
+  .api-key-bar {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .api-key-bar label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .api-key-bar input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: var(--paper-card);
+    color: var(--ink);
+    outline: none;
+    min-width: 0;
+  }
+
+  .api-key-bar input:focus { border-color: var(--accent); }
+
+  .api-key-hint {
+    font-size: 11px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+
+  .api-key-hint a { color: var(--accent); text-decoration: none; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-weight: 300;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* Error state */
+  .error-banner {
+    background: #fff0f0;
+    border: 1px solid #f0b0b0;
+    color: #a03030;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 13px;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  .error-banner.visible { display: block; }
+
+  /* Progress */
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    display: none;
+  }
+
+  .progress-bar-wrap.visible { display: block; }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    header { padding: 1rem 1.25rem; }
+    main { padding: 2rem 1.25rem; }
+    .hero h1 { font-size: 2rem; }
+    .method-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sub<span>learn</span></div>
+  <div class="header-tagline">Five methods. One upload. Deeper learning.</div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Learn anything <em>deeply</em><br>without trying so hard</h1>
+    <p>Upload any text and we'll transform it through five proven subconscious learning methods — so your brain absorbs it naturally.</p>
+
+    <div class="method-pills">
+      <div class="pill pill-rep"><div class="pill-dot"></div>Spaced Repetition</div>
+      <div class="pill pill-sleep"><div class="pill-dot"></div>Sleep Priming</div>
+      <div class="pill pill-emotion"><div class="pill-dot"></div>Emotional Anchoring</div>
+      <div class="pill pill-immersive"><div class="pill-dot"></div>Immersive Exposure</div>
+      <div class="pill pill-visual"><div class="pill-dot"></div>Visualisation</div>
+    </div>
+  </div>
+
+  <!-- API Key -->
+  <div class="api-key-bar">
+    <label>API Key</label>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-…" autocomplete="off" />
+    <span class="api-key-hint">Get yours at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &middot; never stored</span>
+  </div>
+
+  <!-- Upload -->
+  <div class="upload-zone" id="upload-zone">
+    <input type="file" id="file-input" accept=".txt,.md,.pdf,.doc,.docx">
+    <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="6" width="28" height="36" rx="3" stroke="currentColor" stroke-width="2"/>
+      <path d="M16 20h16M16 26h12M16 32h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M30 2v10h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>Drop your material here</h3>
+    <p>TXT, MD files supported · or click to browse · or paste below</p>
+  </div>
+
+  <!-- Text input -->
+  <div class="text-section">
+    <div class="text-section-header">
+      <span>Material</span>
+      <span class="char-count" id="char-count">0 characters</span>
+    </div>
+    <textarea id="material-input" placeholder="Paste your text here — an article, lecture notes, study material, chapter, or any content you want to absorb subconsciously…"></textarea>
+  </div>
+
+  <!-- Method selector -->
+  <div class="method-selector">
+    <h3>Choose learning methods to apply</h3>
+    <div class="method-grid">
+      <div class="method-card selected m-rep" data-method="repetition">
+        <div class="method-card-num">01</div>
+        <div class="method-card-name">Spaced Repetition</div>
+        <div class="method-card-desc">Layered summaries for progressive review</div>
+      </div>
+      <div class="method-card selected m-sleep" data-method="sleep">
+        <div class="method-card-num">02</div>
+        <div class="method-card-name">Sleep Priming</div>
+        <div class="method-card-desc">Pre-sleep anchors for overnight consolidation</div>
+      </div>
+      <div class="method-card selected m-emotion" data-method="emotion">
+        <div class="method-card-num">03</div>
+        <div class="method-card-name">Emotional Anchoring</div>
+        <div class="method-card-desc">Stories & feelings that cement meaning</div>
+      </div>
+      <div class="method-card selected m-immersive" data-method="immersive">
+        <div class="method-card-num">04</div>
+        <div class="method-card-name">Immersive Exposure</div>
+        <div class="method-card-desc">Multi-angle reframing for deep saturation</div>
+      </div>
+      <div class="method-card selected m-visual" data-method="visual">
+        <div class="method-card-num">05</div>
+        <div class="method-card-name">Visualisation</div>
+        <div class="method-card-desc">Mental scenes & sensory rehearsal scripts</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <button class="generate-btn" id="generate-btn" disabled>
+    Select material and methods to begin →
+  </button>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap" id="progress-wrap">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="results-section">
+    <div class="results-header">
+      <h2>Your Learning Pack</h2>
+    </div>
+
+    <div class="summary-strip" id="summary-strip">
+      <div class="summary-card">
+        <div class="sc-icon">📄</div>
+        <div class="sc-val" id="sc-words">—</div>
+        <div class="sc-label">words processed</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">🧠</div>
+        <div class="sc-val" id="sc-methods">—</div>
+        <div class="sc-label">methods applied</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">💡</div>
+        <div class="sc-val" id="sc-concepts">—</div>
+        <div class="sc-label">key concepts</div>
+      </div>
+    </div>
+
+    <div class="tab-nav" id="tab-nav"></div>
+
+    <div id="panels-container"></div>
+  </div>
+</main>
+
+<footer>
+  Sublearn · Powered by Claude · Five subconscious learning methods in one place
+</footer>
+
+<script>
+const METHODS = {
+  repetition: {
+    name: 'Spaced Repetition',
+    badge: 'badge-rep',
+    tab: '🔁 Repetition',
+    desc: 'Progressive review layers',
+    prompt: (text) => `You are a spaced-repetition learning expert. Transform the following material into a structured spaced repetition learning pack.
+
+Create:
+1. **Core Concepts** (3-7 bullet points — the essential ideas to remember)
+2. **Flashcard Set** (8-12 Q&A pairs, formatted as Q: / A:)
+3. **Rapid-Fire Summary** (3 sentences max — the entire material in its most condensed form)
+4. **Review Schedule Note** (brief advice on when to revisit: today, tomorrow, in 3 days, in a week)
+
+Keep language clear and memorable. Use bold for key terms.
+
+Material:
+${text}`
+  },
+  sleep: {
+    name: 'Sleep Priming',
+    badge: 'badge-sleep',
+    tab: '😴 Sleep',
+    desc: 'Pre-sleep consolidation script',
+    prompt: (text) => `You are a sleep-learning and memory consolidation expert. Transform the following material into a pre-sleep priming script designed to be read/listened to in the 15 minutes before sleep.
+
+Create:
+1. **Evening Reflection** (2-3 calming sentences that contextualise why this material matters — written in a warm, reflective tone)
+2. **Core Anchors** (5-7 key ideas distilled to their most memorable, poetic form — short, evocative phrases the subconscious can hold overnight)
+3. **Sleep Visualisation** (a brief 3-4 sentence scene the reader imagines as they close their eyes, incorporating the key ideas naturally)
+4. **Morning Intention** (1-2 sentences to read upon waking to reconnect with the material)
+
+Write in a calm, meditative, gently rhythmic style. Avoid technical jargon.
+
+Material:
+${text}`
+  },
+  emotion: {
+    name: 'Emotional Anchoring',
+    badge: 'badge-emotion',
+    tab: '🎭 Emotion',
+    desc: 'Meaning through feeling',
+    prompt: (text) => `You are an expert in emotionally-resonant learning and memory encoding through narrative. Transform the following material using emotional anchoring techniques.
+
+Create:
+1. **Why It Matters** (a short paragraph connecting this material to real human experience — why should someone care deeply about this?)
+2. **The Story** (a brief narrative or anecdote — real or illustrative — that makes the key concept viscerally memorable. 150-200 words.)
+3. **Emotional Memory Hooks** (4-6 one-liners that attach a strong feeling or relatable experience to each key idea — e.g. "This is the feeling of...")
+4. **Personal Connection Prompts** (3 questions the learner can ask themselves to tie this to their own life and emotions)
+
+Write with warmth, honesty, and emotional intelligence. The goal is to make the material feel personally meaningful.
+
+Material:
+${text}`
+  },
+  immersive: {
+    name: 'Immersive Exposure',
+    badge: 'badge-immersive',
+    tab: '🌊 Immersive',
+    desc: 'Multi-angle saturation',
+    prompt: (text) => `You are an immersive learning designer who creates multi-format, multi-angle exposure to deepen subconscious absorption of material.
+
+Create a multi-format exposure pack:
+1. **The Casual Explanation** (explain the material as if chatting to a curious friend over coffee — conversational, no jargon, 100-150 words)
+2. **The Expert Perspective** (reframe the same material as an expert would — precise, nuanced, with deeper implications, 100-150 words)
+3. **The Contrarian View** (what might someone who challenges or critiques these ideas say? Steel-man an alternative perspective, 80-100 words)
+4. **Analogies & Metaphors** (3-5 creative analogies that map the key ideas to everyday experiences)
+5. **Rabbit Holes** (3 related questions or areas to explore next — for continued immersive exposure)
+
+The goal is saturation from multiple angles so the brain encounters the ideas repeatedly but freshly.
+
+Material:
+${text}`
+  },
+  visual: {
+    name: 'Visualisation',
+    badge: 'badge-visual',
+    tab: '🎯 Visualise',
+    desc: 'Mental rehearsal scripts',
+    prompt: (text) => `You are an expert in visualisation-based learning and mental rehearsal techniques. Transform the following material into vivid visualisation scripts.
+
+Create:
+1. **The Mind Map Narrative** (describe a visual mind map of the key concepts in words — as if narrating what someone is drawing. Use spatial language: "in the centre…", "branching out to the left…")
+2. **The Mental Movie** (a rich, sensory 200-word scene where the learner imagines themselves fully understanding and applying this knowledge — what do they see, hear, feel?)
+3. **Symbol Anchors** (assign each key concept a memorable visual symbol or image, and briefly explain why it fits)
+4. **The Expert Visualisation** (a 3-step mental rehearsal: imagine learning it → imagine applying it → imagine teaching it to someone else)
+
+Use vivid, sensory language throughout. The goal is to make abstract ideas feel spatially real in the mind.
+
+Material:
+${text}`
+  }
+};
+
+// State
+let selectedMethods = new Set(['repetition','sleep','emotion','immersive','visual']);
+let generatedResults = {};
+let activeTab = null;
+
+// DOM refs
+const uploadZone = document.getElementById('upload-zone');
+const fileInput = document.getElementById('file-input');
+const materialInput = document.getElementById('material-input');
+const charCount = document.getElementById('char-count');
+const generateBtn = document.getElementById('generate-btn');
+const resultsSection = document.getElementById('results-section');
+const tabNav = document.getElementById('tab-nav');
+const panelsContainer = document.getElementById('panels-container');
+const errorBanner = document.getElementById('error-banner');
+const progressWrap = document.getElementById('progress-wrap');
+const progressFill = document.getElementById('progress-fill');
+const summaryStrip = document.getElementById('summary-strip');
+
+// Method card toggles
+document.querySelectorAll('.method-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const method = card.dataset.method;
+    if (selectedMethods.has(method)) {
+      if (selectedMethods.size > 1) {
+        selectedMethods.delete(method);
+        card.classList.remove('selected');
+      }
+    } else {
+      selectedMethods.add(method);
+      card.classList.add('selected');
+    }
+    updateBtn();
+  });
+});
+
+// Textarea
+materialInput.addEventListener('input', () => {
+  const len = materialInput.value.length;
+  charCount.textContent = len.toLocaleString() + ' characters';
+  updateBtn();
+});
+
+function updateBtn() {
+  const hasText = materialInput.value.trim().length > 50;
+  const hasMethods = selectedMethods.size > 0;
+  generateBtn.disabled = !(hasText && hasMethods);
+  if (hasText && hasMethods) {
+    generateBtn.textContent = `Generate ${selectedMethods.size} learning method${selectedMethods.size > 1 ? 's' : ''} →`;
+  } else if (!hasText) {
+    generateBtn.textContent = 'Select material and methods to begin →';
+  }
+}
+
+// Upload zone
+uploadZone.addEventListener('click', () => fileInput.click());
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.classList.add('drag-over');
+});
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files[0]) readFile(e.target.files[0]);
+});
+
+function readFile(file) {
+  if (file.type === 'text/plain' || file.name.endsWith('.md') || file.name.endsWith('.txt')) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      materialInput.value = e.target.result;
+      materialInput.dispatchEvent(new Event('input'));
+    };
+    reader.readAsText(file);
+  } else {
+    showError('Please upload a .txt or .md file. For PDFs, please copy and paste the text directly.');
+  }
+}
+
+// Generate
+generateBtn.addEventListener('click', generate);
+
+async function generate() {
+  const text = materialInput.value.trim();
+  if (!text) return;
+
+  const apiKey = document.getElementById('api-key-input').value.trim();
+  if (!apiKey || !apiKey.startsWith('sk-ant')) {
+    showError('Please enter a valid Anthropic API key (starts with sk-ant-…)');
+    return;
+  }
+
+  if (location.protocol === 'file:') {
+    showError('⚠️ CORS error: You must serve this file via a local server, not open it directly. Run: python3 -m http.server 8080 then open http://localhost:8080');
+    return;
+  }
+
+  hideError();
+  generatedResults = {};
+  resultsSection.classList.remove('visible');
+  progressWrap.classList.add('visible');
+  progressFill.style.width = '0%';
+  generateBtn.disabled = true;
+  generateBtn.textContent = 'Generating…';
+
+  const methods = Array.from(selectedMethods);
+  buildTabs(methods);
+
+  // Update summary
+  document.getElementById('sc-words').textContent = Math.round(text.split(/\s+/).length).toLocaleString();
+  document.getElementById('sc-methods').textContent = methods.length;
+  document.getElementById('sc-concepts').textContent = '…';
+  summaryStrip.classList.add('visible');
+  resultsSection.classList.add('visible');
+
+  // Show loading in all panels
+  methods.forEach(m => {
+    const panel = document.getElementById('panel-' + m);
+    if (panel) {
+      panel.querySelector('.result-body').innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div> Generating…';
+    }
+  });
+
+  let completed = 0;
+  const promises = methods.map(async (method) => {
+    try {
+      const result = await callClaude(METHODS[method].prompt(text));
+      generatedResults[method] = result;
+      const panel = document.getElementById('panel-' + method);
+      if (panel) {
+        panel.querySelector('.result-body').innerHTML = renderMarkdown(result);
+      }
+    } catch (err) {
+      console.error('Error for method', method, err);
+      const panel = document.getElementById('panel-' + method);
+      if (panel) {
+        panel.querySelector('.result-body').innerHTML = '<em style="color:var(--ink-muted)">Error: ' + err.message + '</em>';
+      }
+      showError('Error: ' + err.message);
+    }
+    completed++;
+    progressFill.style.width = Math.round((completed / methods.length) * 100) + '%';
+  });
+
+  await Promise.all(promises);
+
+  // Estimate concept count
+  const allText = Object.values(generatedResults).join(' ');
+  const boldMatches = allText.match(/\*\*[^*]+\*\*/g) || [];
+  document.getElementById('sc-concepts').textContent = Math.min(boldMatches.length, 30);
+
+  generateBtn.disabled = false;
+  generateBtn.textContent = 'Regenerate →';
+  setTimeout(() => {
+    progressWrap.classList.remove('visible');
+    progressFill.style.width = '0%';
+  }, 600);
+}
+
+function buildTabs(methods) {
+  tabNav.innerHTML = '';
+  panelsContainer.innerHTML = '';
+  activeTab = methods[0];
+
+  methods.forEach((method, i) => {
+    const m = METHODS[method];
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = m.tab;
+    btn.dataset.method = method;
+    btn.addEventListener('click', () => switchTab(method));
+    tabNav.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'result-panel' + (i === 0 ? ' active' : '');
+    panel.id = 'panel-' + method;
+    panel.innerHTML = `
+      <div class="result-panel-header">
+        <div class="result-badge ${m.badge}">${m.name}</div>
+        <div class="result-panel-title">${m.name}</div>
+        <div class="result-panel-desc">${m.desc}</div>
+      </div>
+      <div class="result-body"></div>
+    `;
+    panelsContainer.appendChild(panel);
+  });
+}
+
+function switchTab(method) {
+  activeTab = method;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.method === method);
+  });
+  document.querySelectorAll('.result-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + method);
+  });
+}
+
+async function callClaude(prompt) {
+  const apiKey = document.getElementById('api-key-input').value.trim();
+  if (!apiKey) throw new Error('No API key provided');
+  console.log('Calling Claude API...');
+  let response;
+  try {
+    response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+  } catch (fetchErr) {
+    console.error('Fetch failed (network/CORS):', fetchErr);
+    throw new Error('Network error: ' + fetchErr.message);
+  }
+  console.log('Response status:', response.status);
+  const rawText = await response.text();
+  console.log('Raw response:', rawText);
+  if (!response.ok) {
+    let errMsg = 'API error ' + response.status;
+    try { errMsg = JSON.parse(rawText).error?.message || errMsg; } catch(e) {}
+    throw new Error(errMsg);
+  }
+  const data = JSON.parse(rawText);
+  return data.content.map(b => b.text || '').join('');
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^# (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, (m) => '<ul>' + m + '</ul>')
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hbulop])/gm, '')
+    .replace(/^(.+)$/gm, (line) => {
+      if (line.startsWith('<')) return line;
+      return '<p>' + line + '</p>';
+    })
+    .replace(/<p><\/p>/g, '')
+    .replace(/<p>(<[hbulop])/g, '$1')
+    .replace(/(<\/[hbulop][^>]*>)<\/p>/g, '$1');
+}
+
+function showError(msg) {
+  errorBanner.textContent = msg;
+  errorBanner.classList.add('visible');
+}
+
+function hideError() {
+  errorBanner.classList.remove('visible');
+}
+</script>
+</body>
+</html>
